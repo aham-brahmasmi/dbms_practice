@@ -95,3 +95,9 @@ VALUES
     delimiter ;
     
     select num_cube(5.5);
+    
+    INSERT INTO EMP (EMPNO, ENAME, JOB, HIREDATE, SAL, COMM, DEPTNO)
+VALUES
+    (8700, 'SMITH', 'CLERK', '1980-12-17', 800, NULL, 20);
+    
+    select * from emp;
