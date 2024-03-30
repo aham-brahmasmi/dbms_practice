@@ -22,6 +22,7 @@ VALUES
     (7900, 'JAMES', 'CLERK', '1981-12-03', 950, NULL, 30),
     (7902, 'FORD', 'ANALYST', '1981-12-03', 3000, NULL, 20),
     (7934, 'MILLER', 'CLERK', '1982-01-23', 1300, NULL, 10);
+	
     
     select * from emp;
     select * from dept;
@@ -47,4 +48,50 @@ VALUES
          select empno number,ename name from emp;
          
    -- 7. Find the names of all employees who were hired on the last day of the month.
-		 select * from emp;
+	     select ename from emp where day(hiredate)=day(LAST_DAY(HIREDATE));
+        
+   -- 8.  Find the name of the employee who is receiving the maximum salary
+         select ename,sal from emp where SAL=(select max(SAL) from emp);
+         
+   -- 9.  Display the sum of SAL for all the employees belonging to DEPTNO 10.
+          select sum(sal) total,deptno from emp where deptno=10 group by deptno;
+         
+   -- 10. Display the rows where JOB column ends with the letter ‘T’
+          select * from emp where job like "%t";
+		  
+   -- 11. Write a stored procedure to convert a temperature in Fahrenheit (F) to its equivalent in Celsius (C). The
+   --     required formula is:- C= (F-32)*5/9
+   --     Insert the temperature in Centigrade into TEMPP table. Calling program for the stored procedure need not be written.	   
+
+         create table tempp(id int primary key auto_increment,ce_temp float,far_temp float);
+         
+         delimiter //
+         create procedure temp_convert(in temp_in_far float)
+         begin
+         declare temp_in_cel float;
+         set temp_in_cel=(temp_in_far-32)*5/9;
+         insert into tempp(ce_temp,far_temp)values(temp_in_cel,temp_in_far);
+         end;
+         //
+         delimiter ;
+         
+		call temp_convert(33.8);
+        select * from tempp;
+        
+	-- 12.  Write a stored function by the name of Num_cube. The stored function should return the cube of a  
+	--      number ‘N’. The number ‘N’ should be passed to the stored function as a parameter. Calling program for
+    --      the stored function need not be written.
+    
+    delimiter //
+    create function num_cube(num float)
+    returns float
+    deterministic
+    begin
+    declare cube_of_num float;
+    set cube_of_num=pow(num,3);
+    return cube_of_num;
+    end;
+    //
+    delimiter ;
+    
+    select num_cube(5.5);
