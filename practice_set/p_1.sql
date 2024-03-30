@@ -38,6 +38,12 @@ VALUES
      join emp ee on(ee.ename="king")
      where e.deptno=ee.deptno;
      
+     select e.ename,e.job,e.deptno from emp e
+     join emp ee on e.deptno=ee.deptno
+	 where ee.ename="king";
+     
+    
+     
    -- 4.  Find the names of all employees hired in the month of February (of any year).
         select ename from emp where month(HIREDATE)=2;
         

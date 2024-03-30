@@ -97,3 +97,105 @@ call delEMpLEssThanGivenSalary(11000);
 -- 9. Write a stored procedure that updates the job title for a given employee ID. The procedure should take input
 --    parameters for the employee ID and the new job title.
 
+  delimiter //
+create procedure updatejobtitle(in e_id int,in j_title varchar(60))
+begin
+	update employees
+    set job_title=j_title
+    where emp_id=e_id;
+end;
+//
+delimiter ;
+
+-- 10. Write a stored procedure that returns a list of all employees who have been with the company for more than a
+--     specified number of years. The procedure should take an input parameter for the number of years.
+use hr;
+select * from employees;
+
+delimiter //
+create procedure empList(in year_spend int)
+begin
+	 select * from employees
+     where timestampdiff(year,hire_date,now())>year_spend;
+end;
+//
+delimiter ;
+
+call empList(10);
+
+
+-- 11. Write a stored function that takes an employee ID as an input parameter and returns the employee's salary.
+ 
+ delimiter //
+create function sal(emp_id int)
+returns int
+deterministic 
+begin
+	declare temp_sal int;
+	select salary into temp_sal from employees
+    where employee_id=emp_id;
+    return temp_sal;
+end;
+// 
+delimiter ;
+
+
+-- 12. Write a stored function that takes an employee ID as an input parameter and returns the number of years the
+--     employee has been with the company.
+
+delimiter //
+create function expr(emp_id int)
+returns int
+deterministic
+begin
+     declare exp int;
+	 select timestampdiff(year,hire_date,now()) into exp from employees
+     where employee_id=emp_id;
+     return exp;
+end;
+//
+delimiter ;
+
+select expr(100);
+
+-- 13. Write a stored function that takes a department ID as an input parameter and returns the total salary of all
+--     employees in that department.
+
+select * from employees;
+select * from departments;
+
+delimiter //
+create function tot_sal(dep_id int)
+returns int
+deterministic
+begin
+	declare total int;
+    select sum(salary) into total from employees
+    where department_id=dep_id;
+    return total;
+end;
+//
+delimiter ;
+use hr;
+select tot_sal(90);
+
+
+-- 14. Write a stored function that takes an employee ID as an input parameter and returns the employee's manager's name.
+/*delimiter //
+create function emp_man(emp_id int)
+returns varchar(40)
+deterministic
+begin
+	declare full_name varchar(70);
+    select concat(e.first_name,' ',e.last_name) into full_name from employees e
+    join employees d on d.manager_id=e.employee_id
+    where e.employee_id=emp_id;
+end;
+//
+delimiter ;*/
+
+
+
+use hr;
+select * from employees;
+select * from departments;
