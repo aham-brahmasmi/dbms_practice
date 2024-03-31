@@ -78,7 +78,7 @@ select c.customer_id,concat(c.first_name," ",c.last_name) full_name,o.order_id,o
 left join orders o on c.customer_id=o.customer_id;
 
 -- 8.Write a Query to customer name in order of creditLimit smallest to highest.
-select concat(first_name," ",last_name) full_name from customers order by creditLimit asc;
+select concat(first_name," ",last_name) full_name,creditLimit from customers order by creditLimit asc;
 select * from customers;
 
 -- 9.  Write a stored procedure by name order_day. The procedure should show the customer_id and the
@@ -89,7 +89,7 @@ desc orders;
 delimiter //
 create procedure order_day(in id int)
 begin
-select c.customer_id,o.order_date from customers c
+select c.customer_id,o.order_date,dayname(o.order_date) as Day_Name from customers c
 join orders o on c.customer_id=o.customer_id
 where c.customer_id=id;
 end;
@@ -102,7 +102,7 @@ call order_day(114);
 delimiter //
 create procedure order_dday()
 begin
-select c.customer_id,o.order_date from customers c
+select c.customer_id,o.order_date,dayname(o.order_date) as Day_Name from customers c
 join orders o on c.customer_id=o.customer_id;
 end;
 //
