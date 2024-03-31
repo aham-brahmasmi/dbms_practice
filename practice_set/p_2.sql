@@ -181,21 +181,85 @@ select tot_sal(90);
 
 
 -- 14. Write a stored function that takes an employee ID as an input parameter and returns the employee's manager's name.
-/*delimiter //
-create function emp_man(emp_id int)
+
+use practice_set;
+
+delimiter //
+create function emp_man(em_id int)
 returns varchar(40)
 deterministic
 begin
 	declare full_name varchar(70);
-    select concat(e.first_name,' ',e.last_name) into full_name from employees e
-    join employees d on d.manager_id=e.employee_id
-    where e.employee_id=emp_id;
+	select d.manager into full_name from departments d
+    join employees e on e.emp_id=d.e_id
+    where e.emp_id=em_id;
+    return full_name;
 end;
 //
-delimiter ;*/
+delimiter ;
+select emp_man(7);
 
+#######################################################################################################################################################
+ -- Triggers
+ 
+-- 1. How can MySQL triggers be used to automatically update employee records when a department is hanged?
 
+# In this question updating employees table means changing the department_id from employees table when we do change the department_id in
+# in departments table.
 
 use hr;
-select * from employees;
-select * from departments;
+delimiter //
+create trigger update_emp_if_dept
+before update on departments
+for each row 
+begin
+update employees set department_id=new.department_id where department_id=Old.department_id;
+end;
+// 
+delimiter ;
+
+update departments set department_id=65 where department_id=60;
+
+-- 2. What MySQL trigger can be used to prevent an employee from being deleted if they are currently assigned to a department?
+
+delimiter //
+create trigger prevent_del
+before delete on employees
+for each row
+begin
+ if old.DEPARTMENT_ID!=0 then
+ signal sqlstate '45000' set message_text= 'cant delete employee with department ';
+end if;
+end;
+//
+delete from employees where employee_id=100;
+
+-- 3. How can a MySQL trigger be used to send an email notification to HR when an employee is hired or terminated?
+show triggers;
+
+create table message(message varchar(50),emp_id int);
+
+delimiter //
+create trigger hire_mes
+after insert on employee
+for each row
+begin
+insert into message values("new emoloyee hired",new.id);
+end;
+//
+delimiter ;
+
+
+delimiter //
+create trigger del_mes
+before delete on employee
+for each row
+begin
+insert into message values("employee terminated",old.id);
+end;
+//
+delimiter ;
+
+insert into employee values(545,"smitesh",1);
+delete from employee where id=545;
+
