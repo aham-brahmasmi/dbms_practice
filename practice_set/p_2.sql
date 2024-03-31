@@ -264,3 +264,6 @@ delimiter ;
 insert into employee values(545,"smitesh",1);
 delete from employee where id=545;
 
+use hr;
+desc employees;
+desc departments;
