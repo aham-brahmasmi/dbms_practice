@@ -79,6 +79,7 @@ end;
 //
 delimiter ;
 
+select emp_info('rahul');
 
 -- 8.Write a stored procedure that deletes all employees who have a salary less than a specified amount. The
 --   procedure should take an input parameter for the minimum salary.
