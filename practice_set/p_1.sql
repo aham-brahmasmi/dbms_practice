@@ -42,7 +42,9 @@ VALUES
      join emp ee on e.deptno=ee.deptno
 	 where ee.ename="king";
      
-    
+    -- Another way using Subquery
+    select ename,job,deptno from emp 
+    where deptno=(select deptno from emp where ename='KING');
      
    -- 4.  Find the names of all employees hired in the month of February (of any year).
         select ename from emp where month(HIREDATE)=2;
@@ -54,7 +56,7 @@ VALUES
          select empno number,ename name from emp;
          
    -- 7. Find the names of all employees who were hired on the last day of the month.
-	     select ename from emp where day(hiredate)=day(LAST_DAY(HIREDATE));
+	     select ename from emp where hiredate=LAST_DAY(HIREDATE);
         
    -- 8.  Find the name of the employee who is receiving the maximum salary
          select ename,sal from emp where SAL=(select max(SAL) from emp);
