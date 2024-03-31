@@ -1,0 +1,25 @@
+use exam;
+
+db.createCollection(" assignment") 
+
+db.createCollection("inventory")  
+
+db.assignment.insertMany([{ item: "journal", qty: 25, tags: ["blank", "red"], size: { h: 14, w: 21, uom: "cm" } },{ item: "mat", qty: 85, tags: ["gray"], size: { h: 27.9, w: 35.5, uom: "cm" } },{ item: "mousepad", qty: 25, tags: ["gel", "blue"], size: { h: 19, w: 22.85, uom: "cm" } }]);
+
+db.inventory.insertMany([{ item: "journal", qty: 25, tags: ["blank", "red"], dim_cm: [ 14, 21 ] },{ item: "notebook", qty: 50, tags: ["red", "blank"], dim_cm: [ 14, 21 ] },{ item: "paper", qty: 100, tags: ["red", "blank", "plain"], dim_cm: [ 14, 21 ] },{ item: "planner", qty: 75, tags: ["blank", "red"], dim_cm: [ 22.85, 30 ] },{ item: "postcard", qty: 45, tags: ["blue"], dim_cm: [ 10, 15.25 ] }])
+
+
+Q1.get assignment documents having tags = gray
+ ->  db.assignment.find({tags:"gray"})
+
+Q2. get inventory details whose dim_cm > 10 , sorted by qty descending order and print only 3
+->  db.inventory.find( { dim_cm: { $gt: 10 }}).sort({qty:-1}).limit(3)
+
+Q3.  Create index on inventory in descending order of qty
+->  db.inventory.createIndex({qty:-1})
+
+Q4.  Querty to aggregare sum of qty in inventory collection
+->   db.inventory.aggregate([{$group:{_id:null,toatl_qty:{$sum:"$qty"}}}]);
+
+Q5.  query to update inventory collection item name where qty:75 and dim_cm > 22
+->   db.inventory.updateMany({ qty: 75, dim_cm: { $gt: 22 } },{ $set: { item_name: "New Item Name" } });
