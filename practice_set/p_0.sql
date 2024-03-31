@@ -89,7 +89,7 @@ desc orders;
 delimiter //
 create procedure order_day(in id int)
 begin
-select c.customer_id,o.order_date from customers c
+select c.customer_id,o.order_date,dayname(o.order_date) as Day_Name from customers c
 join orders o on c.customer_id=o.customer_id
 where c.customer_id=id;
 end;
@@ -102,7 +102,7 @@ call order_day(114);
 delimiter //
 create procedure order_dday()
 begin
-select c.customer_id,o.order_date from customers c
+select c.customer_id,o.order_date,dayname(o.order_date) as Day_Name from customers c
 join orders o on c.customer_id=o.customer_id;
 end;
 //
